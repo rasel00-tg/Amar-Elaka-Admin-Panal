@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>আমার এলাকা | Admin Dashboard</title>
+  <meta name="description" content="আমার এলাকা অ্যাপের অ্যাডমিন কন্ট্রোল প্যানেল"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+
+<!-- GLOBAL LOADER -->
+<div id="globalLoader" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255, 255, 255, 0.9); backdrop-filter:blur(5px); z-index:9999; flex-direction:column; align-items:center; justify-content:center;">
+  <div style="width:50px; height:50px; border:4px solid #f3f3f3; border-top:4px solid #2563eb; border-radius:50%; animation:spin 1s linear infinite; margin-bottom:20px;"></div>
+  <p style="font-weight:600; color:#1e293b;">লগইন হচ্ছে, অপেক্ষা করুন...</p>
+</div>
+<style>
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+.password-toggle {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #64748b;
+  font-size: 18px;
+  user-select: none;
+}
+</style>
+
+<!-- LOGIN PAGE -->
+<div id="loginPage" class="login-page">
+  <div class="login-bg-overlay"></div>
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-img-wrap">
+        <img src="pollanlogo.png" alt="আমার এলাকা লোগো" class="login-logo-img"
+             onerror="this.style.display='none';document.getElementById('loginLogoFallback').style.display='flex';"/>
+        <div class="logo-icon" id="loginLogoFallback" style="display:none;">আ.এ</div>
+      </div>
+      <h1>আমার এলাকা</h1>
+      <p>অ্যাডমিন কন্ট্রোল প্যানেল</p>
+    </div>
+    <div class="login-form">
+      <div class="form-group">
+        <label>ইমেইল</label>
+        <div class="input-wrapper">
+          <span class="input-icon">✉</span>
+          <input type="email" id="loginEmail" placeholder="admin@example.com"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>পাসওয়ার্ড</label>
+        <div class="input-wrapper" style="position: relative;">
+          <span class="input-icon">🔒</span>
+          <input type="password" id="loginPassword" placeholder="••••••••"/>
+          <span class="password-toggle" id="togglePasswordIcon" onclick="togglePasswordVisibility()">👁️</span>
+        </div>
+        <div style="text-align: right; margin-top: 8px;">
+          <span onclick="forgotPassword()" style="color: #2563eb; font-size: 13px; cursor: pointer; text-decoration: underline;">পাসওয়ার্ড ভুলে গেছেন?</span>
+        </div>
+      </div>
+      <div id="loginError" class="error-msg" style="display:none;"></div>
+      <button class="btn-primary btn-full" onclick="doLogin()" id="loginBtn">
+        <span id="loginBtnText">লগইন করুন</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN DASHBOARD -->
+<div id="dashboard" class="dashboard" style="display:none;">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <img src="pollanlogo.png" alt="লোগো" class="sidebar-logo-img"
+             onerror="this.style.display='none';document.getElementById('sidebarLogoFallback').style.display='flex';"/>
+        <div class="logo-icon-sm" id="sidebarLogoFallback" style="display:none;">আ.এ</div>
+        <div>
+          <span class="sidebar-title">আমার এলাকা</span>
+          <span class="sidebar-subtitle">Admin Panel</span>
+        </div>
+      </div>
+      <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sidebarAvatar">A</div>
+      <div class="user-info">
+        <span class="user-name" id="sidebarUserName">Admin</span>
+        <span class="user-role" id="sidebarUserRole">Super Admin</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-title">মূল মেনু</div>
+      <a class="nav-item active" onclick="showSection('overview')" id="nav-overview">
+        <span class="nav-icon">📊</span><span class="nav-label">ড্যাশবোর্ড</span>
+      </a>
+      <a class="nav-item" onclick="showSection('lostFound')" id="nav-lostFound">
+        <span class="nav-icon">🔍</span><span class="nav-label">হারানো বিজ্ঞপ্তি</span>
+      </a>
+      <a class="nav-item" onclick="showSection('complaints')" id="nav-complaints">
+        <span class="nav-icon">📝</span><span class="nav-label">অভিযোগ</span>
+        <span class="nav-badge" id="badge-complaints">0</span>
+      </a>
+      <a class="nav-item" onclick="showSection('businesses')" id="nav-businesses">
+        <span class="nav-icon">🏪</span><span class="nav-label">ব্যবসা তালিকা</span>
+      </a>
+      <a class="nav-item" onclick="showSection('bloodDonors')" id="nav-bloodDonors">
+        <span class="nav-icon">🩸</span><span class="nav-label">রক্তদাতা</span>
+      </a>
+      <a class="nav-item" onclick="showSection('organizations')" id="nav-organizations">
+        <span class="nav-icon">🏛️</span><span class="nav-label">সংগঠন</span>
+      </a>
+      <a class="nav-item" onclick="showSection('jobs')" id="nav-jobs">
+        <span class="nav-icon">💼</span><span class="nav-label">চাকরি পোস্ট</span>
+      </a>
+      <a class="nav-item" onclick="showSection('emergency')" id="nav-emergency">
+        <span class="nav-icon">📞</span><span class="nav-label">জরুরি ফোন বুক</span>
+      </a>
+      <a class="nav-item" onclick="showSection('islamic')" id="nav-islamic">
+        <span class="nav-icon">🕌</span><span class="nav-label">ইসলামিক আপডেট</span>
+      </a>
+
+      <div class="nav-section-title">অ্যাডমিন কন্ট্রোল</div>
+      <a class="nav-item" onclick="showSection('pushNotifications')" id="nav-pushNotifications">
+        <span class="nav-icon">🔔</span><span class="nav-label">পুশ নোটিফিকেশন</span>
+      </a>
+      <a class="nav-item" onclick="showSection('users')" id="nav-users">
+        <span class="nav-icon">👥</span><span class="nav-label">সকল ইউজার</span>
+      </a>
+      <a class="nav-item" onclick="showSection('admins')" id="nav-admins">
+        <span class="nav-icon">🛡️</span><span class="nav-label">অ্যাডমিন ম্যানেজমেন্ট</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-logout" onclick="doLogout()">
+        <span>🚪</span> লগআউট
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content" id="mainContent">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="topbar-toggle" onclick="toggleSidebar()">☰</button>
+        <h2 class="page-title" id="pageTitle">ড্যাশবোর্ড</h2>
+      </div>
+      <div class="topbar-right">
+        <div class="topbar-time" id="topbarTime"></div>
+        <div class="topbar-user">
+          <span id="topbarUserName">Admin</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- OVERVIEW SECTION -->
+    <section id="section-overview" class="content-section active">
+      <div class="stats-grid">
+        <div class="stat-card stat-green">
+          <div class="stat-icon">👥</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-users">—</span>
+            <span class="stat-label">মোট ইউজার</span>
+          </div>
+        </div>
+        <div class="stat-card stat-blue">
+          <div class="stat-icon">📢</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-notices">—</span>
+            <span class="stat-label">মোট নোটিশ</span>
+          </div>
+        </div>
+        <div class="stat-card stat-red">
+          <div class="stat-icon">📝</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-complaints">—</span>
+            <span class="stat-label">মোট অভিযোগ</span>
+          </div>
+        </div>
+        <div class="stat-card stat-orange">
+          <div class="stat-icon">🩸</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-donors">—</span>
+            <span class="stat-label">রক্তদাতা</span>
+          </div>
+        </div>
+        <div class="stat-card stat-purple">
+          <div class="stat-icon">🏪</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-businesses">—</span>
+            <span class="stat-label">ব্যবসা প্রতিষ্ঠান</span>
+          </div>
+        </div>
+        <div class="stat-card stat-teal">
+          <div class="stat-icon">💼</div>
+          <div class="stat-info">
+            <span class="stat-value" id="stat-jobs">—</span>
+            <span class="stat-label">চাকরির বিজ্ঞপ্তি</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="recent-grid">
+        <div class="card">
+          <div class="card-header"><h3>সাম্প্রতিক অভিযোগ</h3></div>
+          <div class="card-body" id="recentComplaints"><div class="loading"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>সাম্প্রতিক ইউজার</h3></div>
+          <div class="card-body" id="recentUsers"><div class="loading"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PUSH NOTIFICATION SECTION -->
+    <section id="section-pushNotifications" class="content-section">
+      <div class="section-header">
+        <h3>পুশ নোটিফিকেশন সিস্টেম</h3>
+      </div>
+      <div class="card" style="max-width: 600px; margin: 0 auto; padding: 20px;">
+        <div class="form-group">
+          <label style="font-weight:bold;">নোটিফিকেশন টাইটেল (Title)</label>
+          <input type="text" id="pushTitle" placeholder="Title for all users" style="width:100%; padding:12px; border:1px solid #cbd5e1; border-radius:8px; font-weight:bold;">
+        </div>
+        <div class="form-group" style="margin-top:16px;">
+          <label style="font-weight:bold;">বিস্তারিত বিবরণ (Body)</label>
+          <textarea id="pushBody" rows="5" placeholder="Detail body message..." style="width:100%; padding:12px; border:1px solid #cbd5e1; border-radius:8px;"></textarea>
+        </div>
+        <div style="margin-top:16px;">
+          <button id="sendPushBtn" class="btn-primary" style="width:100%; padding:14px; border-radius:8px; font-size:16px;" onclick="sendPushNotification()">
+            পাঠান (Send Notification)
+          </button>
+        </div>
+        <p id="pushStatus" style="margin-top:10px; font-weight:bold;"></p>
+      </div>
+    </section>
+
+    <!-- LOST & FOUND SECTION -->
+    <section id="section-lostFound" class="content-section">
+      <div class="section-header">
+        <h3>হারানো বিজ্ঞপ্তি ম্যানেজমেন্ট</h3>
+        <div class="filter-row">
+          <select id="lostFoundFilter" onchange="loadLostFound()">
+            <option value="all">সব বিজ্ঞপ্তি</option>
+            <option value="false">অমীমাংসিত</option>
+            <option value="true">সমাধান হিস্ট্রি</option>
+          </select>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <table class="data-table" id="lostFoundTable">
+            <thead><tr><th>জিনিস ও মালিক</th><th>তারিখ ও স্থান</th><th>যোগাযোগ</th><th>অ্যাডমিন অ্যাকশন</th></tr></thead>
+            <tbody id="lostFoundBody"><tr><td colspan="4"><div class="loading"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPLAINTS SECTION -->
+    <section id="section-complaints" class="content-section">
+      <div class="section-header">
+        <h3>অভিযোগ ম্যানেজমেন্ট</h3>
+        <div class="filter-row">
+          <select id="complaintFilter" onchange="loadComplaints()">
+            <option value="all">সব</option>
+            <option value="false">অমীমাংসিত</option>
+            <option value="true">মীমাংসিত</option>
+          </select>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <table class="data-table">
+            <thead><tr><th>বিভাগ</th><th>বিবরণ</th><th>পোস্টার</th><th>সমর্থন</th><th>স্ট্যাটাস</th><th>তারিখ</th><th>অ্যাকশন</th></tr></thead>
+            <tbody id="complaintsBody"><tr><td colspan="7"><div class="loading"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUSINESSES SECTION -->
+    <section id="section-businesses" class="content-section">
+      <div class="section-header">
+        <h3>ব্যবসা তালিকা ম্যানেজমেন্ট</h3>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <table class="data-table">
+            <thead><tr><th>ব্যবসার নাম</th><th>ধরন</th><th>মালিক</th><th>ফোন</th><th>ঠিকানা</th><th>তারিখ</th><th>অ্যাকশন</th></tr></thead>
+            <tbody id="businessesBody"><tr><td colspan="7"><div class="loading"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- BLOOD DONORS SECTION -->
+    <section id="section-bloodDonors" class="content-section">
+      <div class="section-header">
+        <h3>রক্তদাতা ও হিস্ট্রি ম্যানেজমেন্ট</h3>
+        <div class="filter-row">
+          <select id="bloodGroupFilter" onchange="loadBloodDonors()">
+            <option value="all">সব গ্রুপ</option>
+            <option>A+</option><option>A-</option>
+            <option>B+</option><option>B-</option>
+            <option>AB+</option><option>AB-</option>
+            <option>O+</option><option>O-</option>
+          </select>
+        </div>
+      </div>
+      <div class="card" style="margin-bottom:20px;">
+        <div class="card-header"><h4>বর্তমান রক্তদাতা তালিকা</h4></div>
+        <div class="card-body">
+          <table class="data-table">
+            <thead><tr><th>নাম</th><th>রক্তের গ্রুপ</th><th>ফোন</th><th>লোকেশন</th><th>শেষ রক্তদান</th><th>উপলব্ধ</th><th>অ্যাকশন</th></tr></thead>
+            <tbody id="bloodDonorsBody"><tr><td colspan="7"><div class="loading"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h4>রক্তদান হিস্ট্রি (Donation History)</h4></div>
+        <div class="card-body">
+          <table class="data-table">
+            <thead><tr><th>ডোনার নাম (গ্রুপ)</th><th>ফোন</th><th>ঠিকানা</th><th>রক্তদানের তারিখ</th><th>ইউজার ID</th></tr></thead>
+            <tbody id="bloodHistoryBody"><tr><td colspan="5"><div class="loading"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ORGANIZATIONS SECTION -->
+    <section id="section-organizations" class="content-section">
+      <div class="section-header">
+        <h3>সংগঠন ম্যানেজমেন্ট</h3>
+        <button class="btn-primary" onclick="showModal('orgModal')">+ নতুন সংগঠন</button>
+      </div>
+      <div class="card">
+        <div class="card-body" id="organizationsGrid"><div class="loading"></div></div>
+      </div>
+    </section>
+
+    <!-- JOBS SECTION -->
+    <section id="section-jobs" class="content-section">
+      <div class="section-header"><h3>চাকরি পোস্ট ম্যানেজমেন্ট</h3></div>
+      <div class="card">
+        <div class="card-body">
+          <table class="data-table">
+            <thead><tr><th>পদ</th><th>কোম্পানি</th><th>ঠিকানা</th><th>বেতন</th><th>যোগাযোগ</th><th>তারিখ</th><th>অ্যাকশন</th></tr></thead>
+            <tbody id="jobsBody"><tr><td colspan="7"><div class="loading"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- EMERGENCY / LOCAL PHONEBOOK SECTION -->
+    <section id="section-emergency" class="content-section">
+      <div class="section-header">
+        <h3>স্থানীয় জরুরি ফোন বুক</h3>
+        <button class="btn-primary" onclick="showPhonebookModal()">+ নতুন তথ্য যোগ করুন</button>
+      </div>
+
+      <!-- Category Tabs -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">
+        <button class="pb-tab-btn active" id="pbt-fire"    onclick="filterPhonebook('fire')"    style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#fee2e2;color:#b91c1c;">🔥 ফায়ার সার্ভিস</button>
+        <button class="pb-tab-btn"        id="pbt-hospital" onclick="filterPhonebook('hospital')" style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#fce7f3;color:#9d174d;">🏥 হাসপাতাল</button>
+        <button class="pb-tab-btn"        id="pbt-ambulance" onclick="filterPhonebook('ambulance')" style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#fdf2f8;color:#c2185b;">🚑 এ্যাম্বুলেন্স</button>
+        <button class="pb-tab-btn"        id="pbt-electric" onclick="filterPhonebook('electric')" style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#fef9c3;color:#a16207;">⚡ বিদ্যুৎ</button>
+        <button class="pb-tab-btn"        id="pbt-doctor"  onclick="filterPhonebook('doctor')"  style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#dbeafe;color:#1d4ed8;">👨‍⚕️ ডাক্তার</button>
+        <button class="pb-tab-btn"        id="pbt-police"  onclick="filterPhonebook('police')"  style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#eff6ff;color:#1e40af;">🚓 পুলিশ</button>
+        <button class="pb-tab-btn"        id="pbt-driver"  onclick="filterPhonebook('driver')"  style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#dcfce7;color:#15803d;">🚗 ড্রাইভার</button>
+        <button class="pb-tab-btn"        id="pbt-local"   onclick="filterPhonebook('local')"   style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#f3e8ff;color:#7e22ce;">📞 স্থানীয় নাম্বার</button>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <table class="data-table">
+            <thead><tr><th>নাম</th><th>ফোন</th><th>ঠিকানা/বিস্তারিত</th><th>শেষ আপডেট</th><th>অ্যাকশন</th></tr></thead>
+            <tbody id="phonebookBody"><tr><td colspan="5"><div class="loading"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ISLAMIC SECTION -->
+    <section id="section-islamic" class="content-section">
+      <div class="section-header">
+        <h3>ইসলামিক কন্টেন্ট ম্যানেজমেন্ট</h3>
+      </div>
+      <div class="islamic-grid">
+        <div class="card">
+          <div class="card-header"><h3>নামাজের সময়সূচী</h3></div>
+          <div class="card-body" id="prayerTimeEditor">
+            <div class="prayer-form">
+              <div class="prayer-row"><label>ফজর</label><input type="time" id="fajr" class="prayer-input"/></div>
+              <div class="prayer-row"><label>যোহর</label><input type="time" id="dhuhr" class="prayer-input"/></div>
+              <div class="prayer-row"><label>আসর</label><input type="time" id="asr" class="prayer-input"/></div>
+              <div class="prayer-row"><label>মাগরিব</label><input type="time" id="maghrib" class="prayer-input"/></div>
+              <div class="prayer-row"><label>এশা</label><input type="time" id="isha" class="prayer-input"/></div>
+              <button class="btn-primary" onclick="savePrayerTimes()">সময়সূচী আপডেট করুন</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>দোয়া ম্যানেজমেন্ট</h3>
+            <button class="btn-primary btn-sm" onclick="showModal('duaModal')">+ নতুন দোয়া</button>
+          </div>
+          <div class="card-body" id="duasList"><div class="loading"></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- USERS SECTION -->
+    <section id="section-users" class="content-section">
+      <div class="section-header" style="align-items:flex-start;">
+        <div>
+          <h3>ইউজার ম্যানেজমেন্ট</h3>
+          <p id="totalUsersStr" style="color:#64748b;font-weight:600;margin-top:4px;font-size:14px;margin-bottom:0;">মোট ইউজার: 0</p>
+        </div>
+        <div class="search-box">
+          <span>🔍</span>
+          <input type="text" id="userSearch" placeholder="নাম, ইমেইল বা ফোন দিয়ে খুঁজুন..." oninput="filterUsers()"/>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <table class="data-table">
+            <thead><tr><th>নাম</th><th>ইমেইল</th><th>ফোন</th><th>স্ট্যাটাস</th><th>যোগদান</th><th>অ্যাকশন</th></tr></thead>
+            <tbody id="usersBody"><tr><td colspan="6"><div class="loading"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADMINS SECTION -->
+    <section id="section-admins" class="content-section">
+      <div class="section-header">
+        <h3>অ্যাডমিন ম্যানেজমেন্ট (RBAC)</h3>
+        <button class="btn-primary" onclick="showModal('adminModal')" id="addAdminBtn">+ নতুন অ্যাডমিন যুক্ত করুন</button>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <table class="data-table">
+            <thead><tr><th>নাম</th><th>ইমেইল</th><th>রোল</th><th>এক্সপায়ারি</th><th>স্ট্যাটাস</th><th>অ্যাকশন</th></tr></thead>
+            <tbody id="adminsBody"><tr><td colspan="6"><div class="loading"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<!-- ====== MODALS ====== -->
+
+<!-- Resolve Lost Found Modal -->
+<div id="resolveLostFoundModal" class="modal-overlay" onclick="closeModalOutside(event, 'resolveLostFoundModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="resolveLostFoundModalTitle">বিজ্ঞপ্তি সমাধান</h3>
+      <button class="modal-close" onclick="closeModal('resolveLostFoundModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="resolveLostFoundId"/>
+      <p style="margin-bottom: 15px; color: #555; text-align: center; font-size: 14px;">জিনিসটি পাওয়া গেছে বা সমাধান হয়ে থাকলে নিশ্চিত করুন।</p>
+      <div class="form-group">
+        <label>কীভাবে পাওয়া গেল? (ঐচ্ছিক বিবরণ)</label>
+        <textarea id="resolveLostFoundDetails" rows="4" placeholder="বিস্তারিত লিখুন..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('resolveLostFoundModal')">বাতিল</button>
+      <button class="btn-primary" onclick="resolveLostFoundSubmit()" style="background:var(--success);">নিশ্চিত করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- Organization Modal -->
+<div id="orgModal" class="modal-overlay" onclick="closeModalOutside(event, 'orgModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="orgModalTitle">নতুন সংগঠন যুক্ত করুন</h3>
+      <button class="modal-close" onclick="closeModal('orgModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="orgId"/>
+      <div class="form-group">
+        <label>সংগঠনের নাম *</label>
+        <input type="text" id="orgName" placeholder="সংগঠনের নাম"/>
+      </div>
+      <div class="form-group">
+        <label>প্রতিষ্ঠার তারিখ</label>
+        <input type="date" id="orgFoundingDate"/>
+      </div>
+      <div class="form-group">
+        <label>লক্ষ্য ও উদ্দেশ্য (প্রতিটি লাইনে একটি করে)</label>
+        <textarea id="orgObjectives" rows="4" placeholder="লক্ষ্য ১&#10;লক্ষ্য ২&#10;লক্ষ্য ৩"></textarea>
+      </div>
+      <div class="form-group">
+        <label>লোগো ইউআরএল (ঐচ্ছিক)</label>
+        <input type="url" id="orgLogo" placeholder="https://..."/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('orgModal')">বাতিল</button>
+      <button class="btn-primary" onclick="saveOrganization()">সংরক্ষণ করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- Phonebook Modal (Smart Category-Aware) -->
+<div id="phonebookModal" class="modal-overlay" onclick="closeModalOutside(event, 'phonebookModal')">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 id="phonebookModalTitle">নতুন তথ্য যোগ করুন</h3>
+      <button class="modal-close" onclick="closeModal('phonebookModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="phonebookId"/>
+      <!-- Category selector -->
+      <div class="form-group">
+        <label>ক্যাটাগরি *</label>
+        <select id="pbCategory" onchange="updatePhonebookForm()">
+          <option value="fire">🔥 ফায়ার সার্ভিস</option>
+          <option value="hospital">🏥 হাসপাতাল</option>
+          <option value="ambulance">🚑 এ্যাম্বুলেন্স</option>
+          <option value="electric">⚡ বিদ্যুৎ অফিস</option>
+          <option value="doctor">👨‍⚕️ ডাক্তার</option>
+          <option value="police">🚓 পুলিশ</option>
+          <option value="driver">🚗 স্থানীয় গাড়ীর ড্রাইভার</option>
+          <option value="local">📞 স্থানীয় জরুরি নাম্বার</option>
+        </select>
+      </div>
+      <!-- Dynamic fields container -->
+      <div id="pbDynamicFields"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('phonebookModal')">বাতিল</button>
+      <button class="btn-primary" onclick="savePhonebookEntry()">সংরক্ষণ করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Modal -->
+<div id="adminModal" class="modal-overlay" onclick="closeModalOutside(event, 'adminModal')">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 id="adminModalTitle">নতুন অ্যাডমিন যুক্ত করুন</h3>
+      <button class="modal-close" onclick="closeModal('adminModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group">
+          <label>ইমেইল ঠিকানা *</label>
+          <input type="email" id="adminEmail" placeholder="admin@example.com"/>
+        </div>
+        <div class="form-group">
+          <label>পাসওয়ার্ড *</label>
+          <input type="text" id="adminPassword" placeholder="নতুন পাসওয়ার্ড (অন্তত ৬ অক্ষর)"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>এক্সপায়ারি তারিখ (ঐচ্ছিক — খালি রাখলে স্থায়ী)</label>
+        <input type="date" id="adminExpiry"/>
+      </div>
+      <div class="form-group">
+        <label>রোল ও পারমিশন নির্বাচন করুন:</label>
+        <div class="permissions-grid">
+          <label class="perm-item"><input type="checkbox" value="notices" id="perm-notices"/> 📢 নোটিশ ম্যানেজমেন্ট</label>
+          <label class="perm-item"><input type="checkbox" value="complaints"/> 📝 অভিযোগ ম্যানেজমেন্ট</label>
+          <label class="perm-item"><input type="checkbox" value="businesses"/> 🏪 ব্যবসা ম্যানেজমেন্ট</label>
+          <label class="perm-item"><input type="checkbox" value="bloodDonors"/> 🩸 রক্তদাতা ম্যানেজমেন্ট</label>
+          <label class="perm-item"><input type="checkbox" value="organizations"/> 🏛️ সংগঠন ম্যানেজমেন্ট</label>
+          <label class="perm-item"><input type="checkbox" value="jobs"/> 💼 চাকরি ম্যানেজমেন্ট</label>
+          <label class="perm-item"><input type="checkbox" value="islamic"/> 🕌 ইসলামিক কন্টেন্ট</label>
+          <label class="perm-item"><input type="checkbox" value="users"/> 👥 ইউজার ম্যানেজমেন্ট</label>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('adminModal')">বাতিল</button>
+      <button class="btn-primary" onclick="addAdmin()">অ্যাডমিন যুক্ত করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- Emergency Modal -->
+<div id="emergencyModal" class="modal-overlay" onclick="closeModalOutside(event, 'emergencyModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="emergencyModalTitle">নতুন সেবা যুক্ত করুন</h3>
+      <button class="modal-close" onclick="closeModal('emergencyModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="emergencyId"/>
+      <div class="form-group">
+        <label>ক্যাটাগরি *</label>
+        <select id="emergencyCategory">
+          <option value="Hospital">Hospital / Ambulance</option>
+          <option value="Police">Police</option>
+          <option value="Fire">Fire Service</option>
+          <option value="Others">Others</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>সেবার নাম *</label>
+        <input type="text" id="emergencyTitle" placeholder="যেমন: পল্লান পাড়া অ্যাম্বুলেন্স"/>
+      </div>
+      <div class="form-group">
+        <label>ফোন নম্বর *</label>
+        <input type="tel" id="emergencyNumber" placeholder="যেমন: 01700..."/>
+      </div>
+      <div class="form-group">
+        <label>আইকন কোড *</label>
+        <select id="emergencyIcon">
+          <option value="local_hospital">🏥 হাসপাতাল</option>
+          <option value="local_police">🚓 পুলিশ</option>
+          <option value="fire_extinguisher">🧯 ফায়ার সার্ভিস</option>
+          <option value="electric_bolt">⚡ বিদ্যুৎ</option>
+          <option value="phone">📞 ফোন</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('emergencyModal')">বাতিল</button>
+      <button class="btn-primary" onclick="saveEmergency()">সেভ করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- Dua Modal -->
+<div id="duaModal" class="modal-overlay" onclick="closeModalOutside(event, 'duaModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="duaModalTitle">নতুন দোয়া যুক্ত করুন</h3>
+      <button class="modal-close" onclick="closeModal('duaModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="duaId"/>
+      <div class="form-group">
+        <label>শিরোনাম *</label>
+        <input type="text" id="duaTitle" placeholder="দোয়ার শিরোনাম"/>
+      </div>
+      <div class="form-group">
+        <label>আরবি টেক্সট</label>
+        <textarea id="duaArabic" rows="3" placeholder="আরবি দোয়া..." style="direction:rtl;font-size:20px;"></textarea>
+      </div>
+      <div class="form-group">
+        <label>বাংলা অর্থ</label>
+        <textarea id="duaBangla" rows="3" placeholder="বাংলা অনুবাদ..."></textarea>
+      </div>
+      <div class="form-group">
+        <label>উৎস (হাদিস/কুরআন)</label>
+        <input type="text" id="duaSource" placeholder="বুখারি শরীফ, হাদিস ১২৩"/>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('duaModal')">বাতিল</button>
+      <button class="btn-primary" onclick="saveDua()">সংরক্ষণ করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- User Detail Modal & Business Details -->
+<div id="userDetailModal" class="modal-overlay" onclick="closeModalOutside(event, 'userDetailModal')">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 id="userDetailModalTitle">বিস্তারিত তথ্য</h3>
+      <button class="modal-close" onclick="closeModal('userDetailModal')">✕</button>
+    </div>
+    <div class="modal-body" id="userDetailContent"></div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('userDetailModal')">বন্ধ করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reset Password Modal -->
+<div id="resetPasswordModal" class="modal-overlay" onclick="closeModalOutside(event, 'resetPasswordModal')">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <h3>পাসওয়ার্ড পরিবর্তন</h3>
+      <button class="modal-close" onclick="closeModal('resetPasswordModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="resetTargetUid"/>
+      <div class="form-group">
+        <label>নতুন পাসওয়ার্ড টাইপ করুন *</label>
+        <input type="text" id="newPasswordInput" placeholder="নতুন পাসওয়ার্ড দিন (অন্তত ৬ অক্ষর)"/>
+      </div>
+      <p style="font-size: 11px; color: #ef4444; margin-bottom: 0; line-height: 1.4;">বিঃদ্রঃ: নিরাপত্তার কারণে এই পাসওয়ার্ডটি ডাটাবেসে সেভ হবে যেন ইউজার/অ্যাডমিন পরবর্তীতে লগইন করতে পারে।</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('resetPasswordModal')">বাতিল</button>
+      <button class="btn-primary" onclick="submitNewPassword()">আপডেট করুন</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Modal -->
+<div id="confirmModal" class="modal-overlay">
+  <div class="modal modal-sm">
+    <div class="modal-header">
+      <h3 id="confirmTitle">নিশ্চিত করুন</h3>
+      <button class="modal-close" onclick="closeModal('confirmModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p id="confirmMessage"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('confirmModal')">না</button>
+      <button class="btn-danger" id="confirmBtn" onclick="">হ্যাঁ, নিশ্চিত</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- Firebase SDK -->
+<script type="module" src="app.js"></script>
+</body>
+</html>
