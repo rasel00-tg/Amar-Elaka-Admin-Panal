@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="icon" type="image/png" href="pollanlogo.png"/>
   <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
@@ -124,6 +125,15 @@
       <a class="nav-item" onclick="showSection('emergency')" id="nav-emergency">
         <span class="nav-icon">📞</span><span class="nav-label">জরুরি ফোন বুক</span>
       </a>
+      <a class="nav-item" onclick="showSection('notices')" id="nav-notices">
+        <span class="nav-icon">📢</span><span class="nav-label">নোটিশ বোর্ড</span>
+      </a>
+      <a class="nav-item" onclick="showSection('events')" id="nav-events">
+        <span class="nav-icon">🗓️</span><span class="nav-label">ইভেন্ট ও কমিউনিটি</span>
+      </a>
+      <a class="nav-item" onclick="showSection('communityOverview')" id="nav-communityOverview">
+        <span class="nav-icon">🏘️</span><span class="nav-label">একনজরে (Overview)</span>
+      </a>
       <a class="nav-item" onclick="showSection('islamic')" id="nav-islamic">
         <span class="nav-icon">🕌</span><span class="nav-label">ইসলামিক আপডেট</span>
       </a>
@@ -140,11 +150,7 @@
       </a>
     </nav>
 
-    <div class="sidebar-footer">
-      <button class="btn-logout" onclick="doLogout()">
-        <span>🚪</span> লগআউট
-      </button>
-    </div>
+    <!-- Sidebar footer removed -->
   </aside>
 
   <!-- MAIN CONTENT -->
@@ -152,71 +158,75 @@
     <div class="topbar">
       <div class="topbar-left">
         <button class="topbar-toggle" onclick="toggleSidebar()">☰</button>
-        <h2 class="page-title" id="pageTitle">ড্যাশবোর্ড</h2>
       </div>
       <div class="topbar-right">
-        <div class="topbar-time" id="topbarTime"></div>
-        <div class="topbar-user">
-          <span id="topbarUserName">Admin</span>
-        </div>
+        <button class="topbar-logout-btn" onclick="doLogout()" title="লগআউট">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 15L15 12M15 12L12 9M15 12H4M4 7.24802V7.2002C4 6.08009 4 5.51984 4.21799 5.09202C4.40973 4.71569 4.71547 4.40973 5.0918 4.21799C5.51962 4 6.07987 4 7.19998 4H16.8C17.9201 4 18.4802 4 18.908 4.21799C19.2843 4.40973 19.5905 4.71569 19.7822 5.09202C20 5.51984 20 6.08009 20 7.2002V16.8002C20 17.9203 20 18.4804 19.7822 18.9082C19.5905 19.2845 19.2843 19.5905 18.908 19.7822C18.4802 20 17.9201 20 16.8 20H7.19998C6.07987 20 5.51962 20 5.0918 19.7822C4.71547 19.5905 4.40973 19.2845 4.21799 18.9082C4 18.4804 4 17.9203 4 16.8002V16.7524" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
       </div>
     </div>
 
-    <!-- OVERVIEW SECTION -->
     <section id="section-overview" class="content-section active">
-      <div class="stats-grid">
-        <div class="stat-card stat-green">
-          <div class="stat-icon">👥</div>
-          <div class="stat-info">
-            <span class="stat-value" id="stat-users">—</span>
-            <span class="stat-label">মোট ইউজার</span>
+      <div class="profile-card-luxury animate-scaleIn">
+        <div class="profile-main">
+          <div class="profile-avatar-outer">
+            <div class="profile-avatar-char" id="profileAvatarLarge">A</div>
           </div>
-        </div>
-        <div class="stat-card stat-blue">
-          <div class="stat-icon">📢</div>
-          <div class="stat-info">
-            <span class="stat-value" id="stat-notices">—</span>
-            <span class="stat-label">মোট নোটিশ</span>
-          </div>
-        </div>
-        <div class="stat-card stat-red">
-          <div class="stat-icon">📝</div>
-          <div class="stat-info">
-            <span class="stat-value" id="stat-complaints">—</span>
-            <span class="stat-label">মোট অভিযোগ</span>
-          </div>
-        </div>
-        <div class="stat-card stat-orange">
-          <div class="stat-icon">🩸</div>
-          <div class="stat-info">
-            <span class="stat-value" id="stat-donors">—</span>
-            <span class="stat-label">রক্তদাতা</span>
-          </div>
-        </div>
-        <div class="stat-card stat-purple">
-          <div class="stat-icon">🏪</div>
-          <div class="stat-info">
-            <span class="stat-value" id="stat-businesses">—</span>
-            <span class="stat-label">ব্যবসা প্রতিষ্ঠান</span>
-          </div>
-        </div>
-        <div class="stat-card stat-teal">
-          <div class="stat-icon">💼</div>
-          <div class="stat-info">
-            <span class="stat-value" id="stat-jobs">—</span>
-            <span class="stat-label">চাকরির বিজ্ঞপ্তি</span>
+          <div class="profile-details">
+            <h1 id="profileAdminName" class="bold-text">অ্যাডমিন লোডিং...</h1>
+            <div class="profile-sub">
+              <span id="profileAdminRole" class="badge-role">সুপার অ্যাডমিন</span>
+            </div>
+            <div class="profile-meta">
+              <span class="icon">✉</span> <span id="profileAdminEmail">admin@email.com</span>
+            </div>
+            <div class="profile-join">
+               <span class="icon">📅</span> <span id="profileAdminJoinDate">জয়েনিং: ১৫ মার্চ ২০২৪</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="recent-grid">
-        <div class="card">
-          <div class="card-header"><h3>সাম্প্রতিক অভিযোগ</h3></div>
-          <div class="card-body" id="recentComplaints"><div class="loading"></div></div>
+      <!-- 2. Total User Counter (Hero Section) -->
+      <div class="hero-counter-section">
+        <p class="hero-label">মোট নিবন্ধিত ইউজার</p>
+        <div class="hero-value-wrapper">
+          <span class="hero-value" id="stat-users-live">0</span>
         </div>
-        <div class="card">
-          <div class="card-header"><h3>সাম্প্রতিক ইউজার</h3></div>
-          <div class="card-body" id="recentUsers"><div class="loading"></div></div>
+        <div class="hero-badge">রিয়েল-টাইম ডাটা</div>
+      </div>
+
+      <!-- 3. Statistics Grid (2x2 Layout for Mobile) -->
+      <div class="stats-grid-mobile">
+        <div class="stat-card-m sc-red animate-scale" onclick="showSection('bloodDonors')">
+          <div class="stat-m-icon">🩸</div>
+          <div class="stat-m-value" id="stat-donors">0</div>
+          <div class="stat-m-label">রক্তদাতা</div>
+        </div>
+        <div class="stat-card-m sc-orange animate-scale" onclick="showSection('complaints')">
+          <div class="stat-m-icon">📢</div>
+          <div class="stat-m-value" id="stat-complaints">0</div>
+          <div class="stat-m-label">অভিযোগ বক্স</div>
+        </div>
+        <div class="stat-card-m sc-blue animate-scale" onclick="showSection('lostFound')">
+          <div class="stat-m-icon">🔍</div>
+          <div class="stat-m-value" id="stat-notices">0</div>
+          <div class="stat-m-label">হারানো বিজ্ঞপ্তি</div>
+        </div>
+        <div class="stat-card-m sc-teal animate-scale" onclick="showSection('businesses')">
+          <div class="stat-m-icon">🏪</div>
+          <div class="stat-m-value" id="stat-businesses">0</div>
+          <div class="stat-m-label">ব্যবসা তালিকা</div>
+        </div>
+      </div>
+
+      <!-- 4. Recent Users List (Last 10) -->
+      <div class="recent-users-section">
+        <h3 class="section-title-bn">নতুন সদস্য (সর্বশেষ ১০ জন)</h3>
+        <div class="recent-users-list" id="recentUsersAnimated">
+          <div class="loading"></div>
         </div>
       </div>
     </section>
@@ -244,6 +254,84 @@
       </div>
     </section>
 
+    <!-- EVENTS SECTION -->
+    <section id="section-events" class="content-section">
+      <div class="section-header">
+        <h3>ইভেন্ট ও কমিউনিটি ম্যানেজমেন্ট</h3>
+        <button class="btn-primary" onclick="showEventModal()">+ নতুন ইভেন্ট</button>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <table class="data-table" id="eventsTable">
+            <thead><tr><th>ইভেন্টের নাম</th><th>ক্যাটাগরি</th><th>তারিখ ও সময়</th><th>স্থান</th><th>আয়োজক</th><th>অ্যাকশন</th></tr></thead>
+            <tbody id="eventsBody"><tr><td colspan="6"><div class="loading"></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMMUNITY OVERVIEW SECTION -->
+    <section id="section-communityOverview" class="content-section">
+      <div class="section-header">
+        <h3>একনজরে — এলাকার তথ্য ম্যানেজমেন্ট</h3>
+      </div>
+
+      <!-- Sub-tabs -->
+      <div style="display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:24px;flex-wrap:wrap;">
+        <button id="ovtab-stats" onclick="showOverviewTab('stats')" style="padding:10px 20px;border:none;border-bottom:3px solid #2563eb;font-weight:700;font-size:13px;color:#2563eb;background:transparent;cursor:pointer;">📊 পরিসংখ্যান</button>
+        <button id="ovtab-desc" onclick="showOverviewTab('desc')" style="padding:10px 20px;border:none;border-bottom:3px solid transparent;font-weight:600;font-size:13px;color:#64748b;background:transparent;cursor:pointer;">📝 বিস্তারিত বর্ণনা</button>
+        <button id="ovtab-heritage" onclick="showOverviewTab('heritage')" style="padding:10px 20px;border:none;border-bottom:3px solid transparent;font-weight:600;font-size:13px;color:#64748b;background:transparent;cursor:pointer;">🏛️ ঐতিহ্য ও দর্শনীয়</button>
+      </div>
+
+      <!-- ① Statistics Tab -->
+      <div id="ovpanel-stats">
+        <div class="card" style="max-width:700px;margin:0 auto;">
+          <div class="card-header"><h3>📊 এলাকার পরিসংখ্যান</h3></div>
+          <div class="card-body">
+            <p style="color:#64748b;font-size:13px;margin-bottom:16px;">এই তথ্যগুলো অ্যাপের "একনজরে" পেজে স্ট্যাটস গ্রিডে দেখা যাবে।</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+              <div class="form-group"><label>👥 মোট জনসংখ্যা</label><input type="text" id="ov_population" placeholder="যেমন: ৫,০০০+"/></div>
+              <div class="form-group"><label>🏠 মোট পরিবার</label><input type="text" id="ov_families" placeholder="যেমন: ১,২০০"/></div>
+              <div class="form-group"><label>🕌 মসজিদের সংখ্যা</label><input type="text" id="ov_mosques" placeholder="যেমন: ৫টি"/></div>
+              <div class="form-group"><label>🕌 মাদ্রাসা সংখ্যা</label><input type="text" id="ov_madrasas" placeholder="যেমন: ২টি"/></div>
+              <div class="form-group"><label>🏫 স্কুল/কলেজ সংখ্যা</label><input type="text" id="ov_schools" placeholder="যেমন: ৩টি"/></div>
+              <div class="form-group"><label>🏪 বাজার/হাট সংখ্যা</label><input type="text" id="ov_markets" placeholder="যেমন: ২টি"/></div>
+              <div class="form-group"><label>🤝 ক্লাব/সংগঠন</label><input type="text" id="ov_clubs" placeholder="যেমন: ৪টি"/></div>
+              <div class="form-group"><label>⚽ খেলার মাঠ</label><input type="text" id="ov_grounds" placeholder="যেমন: ১টি"/></div>
+              <div class="form-group"><label>📅 প্রতিষ্ঠার বছর</label><input type="text" id="ov_foundedYear" placeholder="যেমন: ১৮৫০"/></div>
+            </div>
+            <button class="btn-primary" onclick="saveOverviewStats()" style="width:100%;margin-top:12px;padding:13px;font-size:14px;">💾 পরিসংখ্যান সেভ করুন</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ② Description Tab -->
+      <div id="ovpanel-desc" style="display:none;">
+        <div class="card" style="max-width:700px;margin:0 auto;">
+          <div class="card-header"><h3>📝 এলাকার বিস্তারিত বর্ণনা</h3></div>
+          <div class="card-body">
+            <p style="color:#64748b;font-size:13px;margin-bottom:12px;">এই লেখাটি অ্যাপের "একনজরে" পেজে সংক্ষিপ্তভাবে (৩ লাইন) দেখাবে এবং "বিস্তারিত পড়ুন" বোতামে পুরোটা পড়া যাবে।</p>
+            <div class="form-group">
+              <label>এলাকার ইতিহাস ও পরিচিতি</label>
+              <textarea id="ov_description" rows="10" placeholder="এলাকার ইতিহাস, বিশেষত্ব, বিখ্যাত মানুষজন ইত্যাদি বিস্তারিত লিখুন..."></textarea>
+            </div>
+            <button class="btn-primary" onclick="saveOverviewDescription()" style="width:100%;padding:13px;font-size:14px;">💾 বর্ণনা সেভ করুন</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ③ Heritage Tab -->
+      <div id="ovpanel-heritage" style="display:none;">
+        <div class="section-header" style="margin-bottom:16px;">
+          <p style="color:#64748b;font-size:13px;">দর্শনীয় স্থান, পুরাতন স্থাপত্য ও নিদর্শন যোগ, এডিট বা ডিলিট করুন। এগুলো অ্যাপের "একনজরে" ট্যাবে দেখা যাবে।</p>
+          <button class="btn-primary" onclick="showHeritagePlaceModal()">+ নতুন স্থান যোগ করুন</button>
+        </div>
+        <div id="heritagePlacesList" style="display:grid;gap:12px;">
+          <div style="padding:30px;text-align:center;"><div class="loading"></div></div>
+        </div>
+      </div>
+    </section>
+
     <!-- LOST & FOUND SECTION -->
     <section id="section-lostFound" class="content-section">
       <div class="section-header">
@@ -251,18 +339,14 @@
         <div class="filter-row">
           <select id="lostFoundFilter" onchange="loadLostFound()">
             <option value="all">সব বিজ্ঞপ্তি</option>
-            <option value="false">অমীমাংসিত</option>
-            <option value="true">সমাধান হিস্ট্রি</option>
+            <option value="false">খোঁজা হচ্ছে</option>
+            <option value="true">পাওয়া গেছে</option>
           </select>
         </div>
       </div>
-      <div class="card">
-        <div class="card-body">
-          <table class="data-table" id="lostFoundTable">
-            <thead><tr><th>জিনিস ও মালিক</th><th>তারিখ ও স্থান</th><th>যোগাযোগ</th><th>অ্যাডমিন অ্যাকশন</th></tr></thead>
-            <tbody id="lostFoundBody"><tr><td colspan="4"><div class="loading"></div></td></tr></tbody>
-          </table>
-        </div>
+      <!-- Mobile-friendly card list -->
+      <div id="lostFoundCardList" style="display:grid;gap:12px;">
+        <div style="padding:30px;text-align:center;"><div class="loading"></div></div>
       </div>
     </section>
 
@@ -370,51 +454,76 @@
 
       <!-- Category Tabs -->
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;">
-        <button class="pb-tab-btn active" id="pbt-fire"    onclick="filterPhonebook('fire')"    style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#fee2e2;color:#b91c1c;">🔥 ফায়ার সার্ভিস</button>
-        <button class="pb-tab-btn"        id="pbt-hospital" onclick="filterPhonebook('hospital')" style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#fce7f3;color:#9d174d;">🏥 হাসপাতাল</button>
-        <button class="pb-tab-btn"        id="pbt-ambulance" onclick="filterPhonebook('ambulance')" style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#fdf2f8;color:#c2185b;">🚑 এ্যাম্বুলেন্স</button>
-        <button class="pb-tab-btn"        id="pbt-electric" onclick="filterPhonebook('electric')" style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#fef9c3;color:#a16207;">⚡ বিদ্যুৎ</button>
-        <button class="pb-tab-btn"        id="pbt-doctor"  onclick="filterPhonebook('doctor')"  style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#dbeafe;color:#1d4ed8;">👨‍⚕️ ডাক্তার</button>
-        <button class="pb-tab-btn"        id="pbt-police"  onclick="filterPhonebook('police')"  style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#eff6ff;color:#1e40af;">🚓 পুলিশ</button>
-        <button class="pb-tab-btn"        id="pbt-driver"  onclick="filterPhonebook('driver')"  style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#dcfce7;color:#15803d;">🚗 ড্রাইভার</button>
-        <button class="pb-tab-btn"        id="pbt-local"   onclick="filterPhonebook('local')"   style="padding:6px 14px;border-radius:20px;border:none;cursor:pointer;font-size:13px;font-weight:600;background:#f3e8ff;color:#7e22ce;">📞 স্থানীয় নাম্বার</button>
+        <button class="pb-tab-btn" id="pbt-fire"    onclick="filterPhonebook('fire')"    style="padding:8px 16px;border-radius:20px;border:2px solid #fca5a5;cursor:pointer;font-size:13px;font-weight:700;background:#fee2e2;color:#b91c1c;transition:.2s;">🔥 ফায়ার সার্ভিস</button>
+        <button class="pb-tab-btn"        id="pbt-hospital" onclick="filterPhonebook('hospital')" style="padding:8px 16px;border-radius:20px;border:2px solid transparent;cursor:pointer;font-size:13px;font-weight:700;background:#fce7f3;color:#9d174d;transition:.2s;">🏥 হাসপাতাল</button>
+        <button class="pb-tab-btn"        id="pbt-ambulance" onclick="filterPhonebook('ambulance')" style="padding:8px 16px;border-radius:20px;border:2px solid transparent;cursor:pointer;font-size:13px;font-weight:700;background:#fdf2f8;color:#c2185b;transition:.2s;">🚑 এ্যাম্বুলেন্স</button>
+        <button class="pb-tab-btn"        id="pbt-electric" onclick="filterPhonebook('electric')" style="padding:8px 16px;border-radius:20px;border:2px solid transparent;cursor:pointer;font-size:13px;font-weight:700;background:#fef9c3;color:#a16207;transition:.2s;">⚡ বিদ্যুৎ</button>
+        <button class="pb-tab-btn"        id="pbt-doctor"  onclick="filterPhonebook('doctor')"  style="padding:8px 16px;border-radius:20px;border:2px solid transparent;cursor:pointer;font-size:13px;font-weight:700;background:#dbeafe;color:#1d4ed8;transition:.2s;">👨‍⚕️ ডাক্তার</button>
+        <button class="pb-tab-btn"        id="pbt-police"  onclick="filterPhonebook('police')"  style="padding:8px 16px;border-radius:20px;border:2px solid transparent;cursor:pointer;font-size:13px;font-weight:700;background:#eff6ff;color:#1e40af;transition:.2s;">🚓 পুলিশ</button>
+        <button class="pb-tab-btn"        id="pbt-driver"  onclick="filterPhonebook('driver')"  style="padding:8px 16px;border-radius:20px;border:2px solid transparent;cursor:pointer;font-size:13px;font-weight:700;background:#dcfce7;color:#15803d;transition:.2s;">🚗 ড্রাইভার</button>
+        <button class="pb-tab-btn"        id="pbt-local"   onclick="filterPhonebook('local')"   style="padding:8px 16px;border-radius:20px;border:2px solid transparent;cursor:pointer;font-size:13px;font-weight:700;background:#f3e8ff;color:#7e22ce;transition:.2s;">📞 স্থানীয়</button>
       </div>
 
-      <div class="card">
-        <div class="card-body">
-          <table class="data-table">
-            <thead><tr><th>নাম</th><th>ফোন</th><th>ঠিকানা/বিস্তারিত</th><th>শেষ আপডেট</th><th>অ্যাকশন</th></tr></thead>
-            <tbody id="phonebookBody"><tr><td colspan="5"><div class="loading"></div></td></tr></tbody>
-          </table>
-        </div>
-      </div>
+      <!-- Card List for Mobile Friendliness -->
+      <div id="phonebookCardList" style="display:grid;gap:14px;"></div>
     </section>
 
-    <!-- ISLAMIC SECTION -->
+    <!-- ISLAMIC SECTION (Tabbed) -->
     <section id="section-islamic" class="content-section">
       <div class="section-header">
         <h3>ইসলামিক কন্টেন্ট ম্যানেজমেন্ট</h3>
       </div>
-      <div class="islamic-grid">
-        <div class="card">
-          <div class="card-header"><h3>নামাজের সময়সূচী</h3></div>
-          <div class="card-body" id="prayerTimeEditor">
-            <div class="prayer-form">
-              <div class="prayer-row"><label>ফজর</label><input type="time" id="fajr" class="prayer-input"/></div>
-              <div class="prayer-row"><label>যোহর</label><input type="time" id="dhuhr" class="prayer-input"/></div>
-              <div class="prayer-row"><label>আসর</label><input type="time" id="asr" class="prayer-input"/></div>
-              <div class="prayer-row"><label>মাগরিব</label><input type="time" id="maghrib" class="prayer-input"/></div>
-              <div class="prayer-row"><label>এশা</label><input type="time" id="isha" class="prayer-input"/></div>
-              <button class="btn-primary" onclick="savePrayerTimes()">সময়সূচী আপডেট করুন</button>
-            </div>
+
+      <!-- Islamic Sub-tabs -->
+      <div style="display:flex;gap:0;border-bottom:2px solid #e2e8f0;margin-bottom:20px;">
+        <button id="itab-prayer" onclick="showIslamicTab('prayer')" style="padding:10px 22px;border:none;border-bottom:3px solid #2563eb;font-weight:700;font-size:14px;color:#2563eb;background:transparent;cursor:pointer;transition:.2s;">🕌 নামাজের সময়সূচি</button>
+        <button id="itab-duas" onclick="showIslamicTab('duas')" style="padding:10px 22px;border:none;border-bottom:3px solid transparent;font-weight:600;font-size:14px;color:#64748b;background:transparent;cursor:pointer;transition:.2s;">📿 দোয়া ম্যানেজমেন্ট</button>
+      </div>
+
+      <!-- Prayer Times Tab -->
+      <div id="ipanel-prayer">
+        <div class="card" style="max-width:500px;margin:0 auto;">
+          <div class="card-header"><h3>🕌 ৫ ওয়াক্ত নামাজের সময়সূচি</h3></div>
+          <div class="card-body">
+            <p style="color:#64748b;font-size:13px;margin-bottom:20px;">সময় পরিবর্তন করুন। সেভ করলে অ্যাপে রিয়েল-টাইমে আপডেট হবে।</p>
+            <style>
+              .prayer-row-new { display:flex;align-items:center;gap:14px;margin-bottom:16px;padding:12px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0; }
+              .prayer-label { flex:0 0 70px;font-weight:700;color:#1e293b;font-size:15px; }
+              .prayer-time-input { flex:1;padding:10px 14px;border:1.5px solid #cbd5e1;border-radius:10px;font-size:16px;font-weight:600;color:#1e293b;background:#fff; }
+              .prayer-12h-badge { flex:0 0 90px;font-weight:800;color:#2563eb;font-size:15px;text-align:right; }
+            </style>
+            <div class="prayer-row-new"><span class="prayer-label">🌅 ফজর</span><input type="time" id="fajr" class="prayer-time-input" oninput="updateTimeDisplay('fajr')"/><span id="fajr-12h" class="prayer-12h-badge">--:-- --</span></div>
+            <div class="prayer-row-new"><span class="prayer-label">☀️ যোহর</span><input type="time" id="dhuhr" class="prayer-time-input" oninput="updateTimeDisplay('dhuhr')"/><span id="dhuhr-12h" class="prayer-12h-badge">--:-- --</span></div>
+            <div class="prayer-row-new"><span class="prayer-label">🌤️ আসর</span><input type="time" id="asr" class="prayer-time-input" oninput="updateTimeDisplay('asr')"/><span id="asr-12h" class="prayer-12h-badge">--:-- --</span></div>
+            <div class="prayer-row-new"><span class="prayer-label">🌇 মাগরিব</span><input type="time" id="maghrib" class="prayer-time-input" oninput="updateTimeDisplay('maghrib')"/><span id="maghrib-12h" class="prayer-12h-badge">--:-- --</span></div>
+            <div class="prayer-row-new"><span class="prayer-label">🌙 এশা</span><input type="time" id="isha" class="prayer-time-input" oninput="updateTimeDisplay('isha')"/><span id="isha-12h" class="prayer-12h-badge">--:-- --</span></div>
+            <button class="btn-primary" onclick="savePrayerTimes()" style="width:100%;padding:14px;font-size:15px;margin-top:8px;border-radius:12px;">💾 সময়সূচি সেভ করুন (AM/PM ফরম্যাটে)</button>
           </div>
         </div>
-        <div class="card">
-          <div class="card-header">
-            <h3>দোয়া ম্যানেজমেন্ট</h3>
-            <button class="btn-primary btn-sm" onclick="showModal('duaModal')">+ নতুন দোয়া</button>
-          </div>
-          <div class="card-body" id="duasList"><div class="loading"></div></div>
+      </div>
+
+      <!-- Duas Tab -->
+      <div id="ipanel-duas" style="display:none;">
+        <div class="section-header" style="margin-bottom:16px;">
+          <p style="color:#64748b;font-size:13px;">দোয়া যোগ, এডিট ও ডিলিট করুন।</p>
+          <button class="btn-primary" onclick="openDuaModal()" style="white-space:nowrap;">+ নতুন দোয়া যোগ করুন</button>
+        </div>
+        <div id="duasList"><div class="loading"></div></div>
+      </div>
+    </section>
+
+    <!-- NOTICES SECTION -->
+    <section id="section-notices" class="content-section">
+      <div class="section-header">
+        <h3>নোটিশ বোর্ড ও নিউজ</h3>
+        <button class="btn-primary" onclick="showModal('noticeModal')">+ নতুন নোটিশ</button>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <table class="data-table">
+            <thead><tr><th>টাইটেল</th><th>বিবরণ</th><th>তারিখ</th><th>অ্যাকশন</th></tr></thead>
+            <tbody id="noticesBody"><tr><td colspan="4"><div class="loading"></div></td></tr></tbody>
+          </table>
         </div>
       </div>
     </section>
@@ -461,6 +570,46 @@
 
 <!-- ====== MODALS ====== -->
 
+<!-- Notice Modal -->
+<div id="noticeModal" class="modal-overlay" onclick="closeModalOutside(event, 'noticeModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="noticeModalTitle">নতুন নোটিশ যুক্ত করুন</h3>
+      <button class="modal-close" onclick="closeModal('noticeModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="noticeId"/>
+      
+      <div class="form-group animate-slideUp">
+        <label>নোটিশ টাইটেল (Notice Title) *</label>
+        <input type="text" id="noticeTitle" placeholder="টাইটেল লিখুন..."/>
+      </div>
+
+      <div class="form-group animate-slideUp" style="animation-delay: 0.1s">
+        <label>বিস্তারিত নোটিশ (Full Description) *</label>
+        <textarea id="noticeContent" rows="8" placeholder="পুরো নোটিশটি বিস্তারিত লিখুন..."></textarea>
+      </div>
+
+      <div class="form-group animate-slideUp" style="animation-delay: 0.2s">
+        <label>মেয়াদকাল (Expiry Date Selector) - ঐচ্ছিক</label>
+        <div class="date-input-wrapper">
+          <input type="date" id="noticeExpiry"/>
+          <small style="color: #64748b; margin-top: 5px; display: block;">এই তারিখের পর অ্যাপ থেকে অটোমেটিক মুছে যাবে।</small>
+        </div>
+      </div>
+
+      <!-- Hidden fields for compatibility -->
+      <input type="hidden" id="noticeImage" value=""/>
+      <select id="noticePriority" style="display:none;"><option value="normal">normal</option></select>
+      <select id="noticeCategory" style="display:none;"><option value="সাধারণ">সাধারণ</option></select>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('noticeModal')">বাতিল</button>
+      <button class="btn-primary" onclick="saveNotice()">পাবলিশ করুন (Publish)</button>
+    </div>
+  </div>
+</div>
+
 <!-- Resolve Lost Found Modal -->
 <div id="resolveLostFoundModal" class="modal-overlay" onclick="closeModalOutside(event, 'resolveLostFoundModal')">
   <div class="modal">
@@ -502,11 +651,21 @@
       </div>
       <div class="form-group">
         <label>লক্ষ্য ও উদ্দেশ্য (প্রতিটি লাইনে একটি করে)</label>
-        <textarea id="orgObjectives" rows="4" placeholder="লক্ষ্য ১&#10;লক্ষ্য ২&#10;লক্ষ্য ৩"></textarea>
+        <textarea id="orgObjectives" rows="3" placeholder="লক্ষ্য ১&#10;লক্ষ্য ২"></textarea>
       </div>
       <div class="form-group">
         <label>লোগো ইউআরএল (ঐচ্ছিক)</label>
         <input type="url" id="orgLogo" placeholder="https://..."/>
+      </div>
+      
+      <div style="margin-top: 20px; border-top: 1px solid var(--border); padding-top: 15px;">
+        <label style="display: block; font-size: 14px; font-weight: 700; margin-bottom: 12px; color: var(--text);">👤 সদস‍্য তালিকা (পদবি ও নাম)</label>
+        <div id="orgMembersList">
+          <!-- Dynamic members will be added here -->
+        </div>
+        <button type="button" class="btn-secondary btn-sm" onclick="addMemberField()" style="margin-top: 8px; width: 100%; justify-content: center;">
+          ➕ আরও সদস্য যোগ করুন
+        </button>
       </div>
     </div>
     <div class="modal-footer">
@@ -683,6 +842,56 @@
   </div>
 </div>
 
+<!-- Event Modal -->
+<div id="eventModal" class="modal-overlay" onclick="closeModalOutside(event, 'eventModal')">
+  <div class="modal modal-lg">
+    <div class="modal-header">
+      <h3 id="eventModalTitle">নতুন ইভেন্ট যোগ করুন</h3>
+      <button class="modal-close" onclick="closeModal('eventModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="eventId"/>
+      <div class="form-group">
+        <label>ইভেন্টের নাম *</label>
+        <input type="text" id="eventTitle" placeholder="অনুষ্ঠানের নাম লিখুন"/>
+      </div>
+      <div class="form-group">
+        <label>ক্যাটাগরি</label>
+        <select id="eventCategory">
+          <option value="মাহফিল">মাহফিল</option>
+          <option value="খেলাধুলা">খেলাধুলা</option>
+          <option value="সভা">সভা</option>
+          <option value="অন্যান্য">অন্যান্য</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>তারিখ *</label>
+        <input type="date" id="eventDate"/>
+      </div>
+      <div class="form-group">
+        <label>সময় *</label>
+        <input type="time" id="eventTime"/>
+      </div>
+      <div class="form-group">
+        <label>স্থান *</label>
+        <input type="text" id="eventLocation" placeholder="অনুষ্ঠানের স্থান"/>
+      </div>
+      <div class="form-group">
+        <label>আয়োজকের নাম</label>
+        <input type="text" id="eventOrganizer" placeholder="আয়োজক বা কমিটির নাম"/>
+      </div>
+      <div class="form-group">
+        <label>বিস্তারিত বর্ণনা</label>
+        <textarea id="eventDescription" rows="4" placeholder="ইভেন্ট সম্পর্কে বিস্তারিত লিখুন..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('eventModal')">বাতিল</button>
+      <button class="btn-primary" onclick="saveEvent()">সেভ করুন</button>
+    </div>
+  </div>
+</div>
+
 <!-- Reset Password Modal -->
 <div id="resetPasswordModal" class="modal-overlay" onclick="closeModalOutside(event, 'resetPasswordModal')">
   <div class="modal modal-sm">
@@ -717,13 +926,46 @@
     </div>
     <div class="modal-footer">
       <button class="btn-secondary" onclick="closeModal('confirmModal')">না</button>
-      <button class="btn-danger" id="confirmBtn" onclick="">হ্যাঁ, নিশ্চিত</button>
+      <button class="btn-primary" id="confirmBtn">হ্যাঁ</button>
     </div>
   </div>
 </div>
 
 <!-- Toast -->
 <div id="toast" class="toast"></div>
+
+<!-- Heritage Place Modal -->
+<div id="heritagePlaceModal" class="modal-overlay" onclick="closeModalOutside(event,'heritagePlaceModal')">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="heritagePlaceModalTitle">নতুন স্থান যোগ করুন</h3>
+      <button class="modal-close" onclick="closeModal('heritagePlaceModal')">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="heritagePlaceId"/>
+      <div class="form-group">
+        <label>স্থানের নাম *</label>
+        <input type="text" id="hpTitle" placeholder="যেমন: মসজিদ-উল-আকবর"/>
+      </div>
+      <div class="form-group">
+        <label>ক্যাটাগরি *</label>
+        <select id="hpCategory">
+          <option value="দর্শনীয় স্থান">🌿 দর্শনীয় স্থান</option>
+          <option value="পুরাতন স্থাপত্য">🏛️ পুরাতন স্থাপত্য</option>
+          <option value="নিদর্শন">🏺 নিদর্শন</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>বিস্তারিত বর্ণনা *</label>
+        <textarea id="hpDescription" rows="6" placeholder="এই স্থান সম্পর্কে বিস্তারিত লিখুন — ইতিহাস, গুরুত্ব, কীভাবে যাবেন ইত্যাদি..."></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" onclick="closeModal('heritagePlaceModal')">বাতিল</button>
+      <button class="btn-primary" onclick="saveHeritagePlace()">সেভ করুন</button>
+    </div>
+  </div>
+</div>
 
 <!-- Firebase SDK -->
 <script type="module" src="app.js"></script>

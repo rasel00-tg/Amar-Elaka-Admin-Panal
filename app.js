@@ -5,12 +5,8 @@
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import {
-<<<<<<< HEAD
   getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail,
   setPersistence, browserSessionPersistence
-=======
-  getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import {
   getFirestore, collection, doc, getDoc, getDocs, addDoc, setDoc,
@@ -33,7 +29,6 @@ const app   = initializeApp(firebaseConfig);
 const auth  = getAuth(app);
 const db    = getFirestore(app);
 
-<<<<<<< HEAD
 // ── 5-Minute Auto Logout Timer ──
 let inactivityTimer;
 function resetInactivityTimer() {
@@ -48,8 +43,6 @@ document.addEventListener('mousemove', resetInactivityTimer);
 document.addEventListener('keydown', resetInactivityTimer);
 document.addEventListener('click', resetInactivityTimer);
 
-=======
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
 // ── State ──
 let currentUser       = null;
 let currentAdminData  = null;
@@ -133,12 +126,9 @@ onAuthStateChanged(auth, async (user) => {
       }
     } else {
       currentAdminData = { ...adminData, uid: user.uid };
-<<<<<<< HEAD
       // Normalize 'super_admin' string
       if (currentAdminData.role === 'super_admin') currentAdminData.role = 'superAdmin';
       
-=======
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
       if (currentAdminData.expiryDate) {
         const expiry = currentAdminData.expiryDate.toDate ? currentAdminData.expiryDate.toDate() : new Date(currentAdminData.expiryDate);
         if (new Date() > expiry) {
@@ -174,18 +164,14 @@ async function doLogin() {
     showLoginError("ইমেইল ও পাসওয়ার্ড দিন");
     return;
   }
-<<<<<<< HEAD
   
   // Disable button to prevent multi-click
-=======
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
   btn.disabled = true;
   document.getElementById("loginBtnText").textContent = "লগইন হচ্ছে...";
   errDiv.style.display = "none";
   showGlobalLoader();
 
   try {
-<<<<<<< HEAD
     // Ensure persistence is set precisely before signing in to avoid global race conditions
     await setPersistence(auth, browserSessionPersistence);
     await signInWithEmailAndPassword(auth, email, password);
@@ -219,25 +205,11 @@ async function doLogin() {
     showLoginError(msg);
   } finally {
     // ALWAYS clear loading state and reset lock
-=======
-    await signInWithEmailAndPassword(auth, email, password);
-    // Loader will hide automatically in onAuthStateChanged
-  } catch (e) {
-    hideGlobalLoader();
-    let msg = "লগইন ব্যর্থ হয়েছে";
-    if (e.code === "auth/user-not-found" || e.code === "auth/invalid-email") msg = "ইমেইল খুঁজে পাওয়া যায়নি";
-    else if (e.code === "auth/wrong-password") msg = "পাসওয়ার্ড ভুল (আপনি ডাটাবেসে যা লিখেছেন সেটি কাজ করবে না, আপনার আগের অরিজিনাল পাসওয়ার্ডটি দিন)";
-    else if (e.code === "auth/invalid-credential") msg = "পাসওয়ার্ড ভুল (আপনার পুরনো অরিজিনাল পাসওয়ার্ডটি মনে করুন)";
-    else msg = e.message;
-    showLoginError(msg);
-  } finally {
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
     btn.disabled = false;
     document.getElementById("loginBtnText").textContent = "লগইন করুন";
   }
 }
 
-<<<<<<< HEAD
 // Ensure button unlocks when user types in inputs
 document.getElementById("loginEmail").addEventListener('input', () => {
     document.getElementById("loginBtn").disabled = false;
@@ -266,14 +238,6 @@ async function performLogout() {
   } finally {
     hideGlobalLoader();
   }
-=======
-async function doLogout() {
-  showGlobalLoader();
-  activeListeners.forEach(unsub => unsub());
-  activeListeners = [];
-  await signOut(auth);
-  hideGlobalLoader();
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
 }
 
 function showLoginError(msg) {
@@ -322,7 +286,6 @@ function showDashboard() {
   document.getElementById("loginPage").style.display  = "none";
   document.getElementById("dashboard").style.display = "flex";
 
-<<<<<<< HEAD
   const displayName = currentAdminData?.name || currentAdminData?.displayName || "Admin";
   const roleText = currentAdminData?.role === "superAdmin" ? "সুপার অ্যাডমিন" : "অ্যাডমিন";
   const avatarChar = (displayName[0] || "A").toUpperCase();
@@ -359,23 +322,6 @@ function showDashboard() {
 
 function updateClock() {
   // Clock removed from topbar
-=======
-  const displayName = currentAdminData?.name || currentAdminData?.displayName || currentUser.email.split("@")[0];
-  document.getElementById("sidebarUserName").textContent = displayName;
-  document.getElementById("sidebarUserRole").textContent = currentAdminData?.role === "superAdmin" ? "সুপার অ্যাডমিন" : "অ্যাডমিন";
-  document.getElementById("sidebarAvatar").textContent   = (displayName[0] || "A").toUpperCase();
-  document.getElementById("topbarUserName").textContent  = displayName;
-
-  updateClock();
-  setInterval(updateClock, 1000);
-  loadOverview();
-}
-
-function updateClock() {
-  const now = new Date();
-  const opts = { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: true };
-  document.getElementById("topbarTime").textContent = now.toLocaleTimeString("bn-BD", opts);
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
 }
 
 let sidebarOpen = true;
@@ -391,15 +337,12 @@ function toggleSidebar() {
 window.toggleSidebar = toggleSidebar;
 
 function showSection(sectionId) {
-<<<<<<< HEAD
   // Clear active listeners to prevent double data fetching and mem leaks
   if (activeListeners && activeListeners.length > 0) {
     activeListeners.forEach(unsub => { if(typeof unsub === 'function') unsub(); });
     activeListeners = [];
   }
 
-=======
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
   document.querySelectorAll(".content-section").forEach(s => s.classList.remove("active"));
   document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
 
@@ -412,7 +355,6 @@ function showSection(sectionId) {
     overview: "ড্যাশবোর্ড", lostFound: "হারানো বিজ্ঞপ্তি", complaints: "অভিযোগ",
     businesses: "ব্যবসা তালিকা", bloodDonors: "রক্তদাতা", organizations: "সংগঠন",
     jobs: "চাকরি পোস্ট", emergency: "স্থানীয় জরুরি ফোন বুক", islamic: "ইসলামিক আপডেট",
-<<<<<<< HEAD
     users: "ইউজার ম্যানেজমেন্ট", admins: "অ্যাডমিন ম্যানেজমেন্ট", notices: "নোটিশ বোর্ড",
     events: "ইভেন্ট ও কমিউনিটি", communityOverview: "একনজরে (Overview)"
   };
@@ -421,35 +363,20 @@ function showSection(sectionId) {
 
   const loaders = {
     overview: loadOverview,
-=======
-    users: "ইউজার ম্যানেজমেন্ট", admins: "অ্যাডমিন ম্যানেজমেন্ট"
-  };
-  document.getElementById("pageTitle").textContent = titles[sectionId] || sectionId;
-
-  const loaders = {
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
     lostFound: loadLostFound, complaints: loadComplaints,
     businesses: loadBusinesses, bloodDonors: loadBloodDonors,
     organizations: loadOrganizations, jobs: loadJobs,
     emergency: () => loadPhonebook(currentPbCategory),
-<<<<<<< HEAD
     islamic: loadIslamic, users: loadUsers, admins: loadAdmins, notices: loadNotices,
     events: loadEvents,
     communityOverview: loadOverviewDataFull
-=======
-    islamic: loadIslamic, users: loadUsers, admins: loadAdmins
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
   };
   if (loaders[sectionId]) loaders[sectionId]();
 
   // Close mobile sidebar
   if (window.innerWidth <= 900) {
-<<<<<<< HEAD
     const sb = document.getElementById("sidebar");
     if(sb) sb.classList.remove("mobile-open");
-=======
-    document.getElementById("sidebar").classList.remove("mobile-open");
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
   }
 }
 window.showSection = showSection;
@@ -459,7 +386,6 @@ window.showSection = showSection;
 // =========================================
 async function loadOverview() {
   const collections = [
-<<<<<<< HEAD
     { col: "complaints",     id: "stat-complaints" },
     { col: "donors",         id: "stat-donors" },
     { col: "notices",        id: "stat-notices-board" },
@@ -485,32 +411,11 @@ async function loadOverview() {
     } catch (e) {
       const el = document.getElementById(item.id);
       if (el) el.textContent = "—";
-=======
-    { col: "users",        id: "stat-users" },
-    { col: "notices",      id: "stat-notices" },
-    { col: "complaints",   id: "stat-complaints" },
-    { col: "donors",       id: "stat-donors" },
-    { col: "businesses",   id: "stat-businesses" },
-    { col: "jobs",         id: "stat-jobs" },
-  ];
-
-  for (const item of collections) {
-    if (item.col === "users") continue; // We handle users separately
-    try {
-      const snap = await getDocs(collection(db, item.col));
-      document.getElementById(item.id).textContent = snap.size;
-      if (item.id === "stat-complaints") {
-        document.getElementById("badge-complaints").textContent = snap.size;
-      }
-    } catch (e) {
-      document.getElementById(item.id).textContent = "—";
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
     }
   }
 
   // Handle users with growth calc
   try {
-<<<<<<< HEAD
   // Handle users with live growth calc
   try {
     onSnapshot(collection(db, "users"), (snap) => {
@@ -520,10 +425,6 @@ async function loadOverview() {
       const sidebarStat = document.getElementById("stat-users");
       if(sidebarStat) sidebarStat.textContent = snap.size;
 
-=======
-    onSnapshot(collection(db, "users"), (snap) => {
-      document.getElementById("stat-users").textContent = snap.size;
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
       let currentMonth = 0; let lastMonth = 0;
       const now = new Date();
       snap.docs.forEach(d => {
@@ -537,24 +438,15 @@ async function loadOverview() {
       let growth = 0;
       if (lastMonth > 0) growth = ((currentMonth - lastMonth) / lastMonth) * 100;
       else if (currentMonth > 0) growth = 100;
-<<<<<<< HEAD
       
       const growthEl = document.getElementById("stat-users-growth");
       if(growthEl) {
         growthEl.textContent = growth >= 0 ? `▲ +${Math.round(growth)}% গত মাস থেকে` : `▼ ${Math.round(growth)}% গত মাস থেকে`;
-=======
-      const growthEl = document.getElementById("stat-users-growth");
-      if(growthEl) {
-        growthEl.textContent = growth >= 0 ? `▲ +${Math.round(growth)}% (গত মাস থেকে)` : `▼ ${Math.round(growth)}% (গত মাস থেকে)`;
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
         growthEl.style.color = growth >= 0 ? "#10b981" : "#ef4444";
       }
     });
   } catch(e) {}
-<<<<<<< HEAD
   } catch(e) {}
-=======
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
 
   loadRecentComplaints();
   loadRecentUsers();
@@ -562,7 +454,6 @@ async function loadOverview() {
 
 async function loadRecentComplaints() {
   const el = document.getElementById("recentComplaints");
-<<<<<<< HEAD
   if (!el) return;
   try {
     const q = query(collection(db, "complaints"), orderBy("createdAt", "desc"), limit(5));
@@ -581,25 +472,10 @@ async function loadRecentComplaints() {
       console.error("Recent complaints error:", error);
     });
     activeListeners.push(unsub);
-=======
-  try {
-    const q    = query(collection(db, "complaints"), orderBy("createdAt", "desc"), limit(5));
-    const snap = await getDocs(q);
-    if (snap.empty) { el.innerHTML = emptyState("কোনো অভিযোগ নেই"); return; }
-    el.innerHTML = snap.docs.map(d => {
-      const data = d.data();
-      return `<div style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:12px;">
-        <span class="badge badge-${data.isResolved ? "success" : "warning"}">${data.isResolved ? "মীমাংসিত" : "অমীমাংসিত"}</span>
-        <span class="truncate">${data.description || ""}</span>
-        <span style="margin-left:auto;font-size:12px;color:#64748b;">${fmtDate(data.createdAt)}</span>
-      </div>`;
-    }).join("");
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
   } catch (e) { el.innerHTML = `<p class="error-msg">${e.message}</p>`; }
 }
 
 async function loadRecentUsers() {
-<<<<<<< HEAD
   const el = document.getElementById("recentUsersAnimated");
   if(!el) return;
   
@@ -637,24 +513,6 @@ async function loadRecentUsers() {
       }
     });
     activeListeners.push(unsub);
-=======
-  const el = document.getElementById("recentUsers");
-  try {
-    const q    = query(collection(db, "users"), orderBy("createdAt", "desc"), limit(5));
-    const snap = await getDocs(q);
-    if (snap.empty) { el.innerHTML = emptyState("কোনো ইউজার নেই"); return; }
-    el.innerHTML = snap.docs.map(d => {
-      const data = d.data();
-      return `<div style="padding:10px 0;border-bottom:1px solid #f1f5f9;display:flex;align-items:center;gap:12px;">
-        <div style="width:32px;height:32px;background:linear-gradient(135deg,#2563eb,#7c3aed);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;flex-shrink:0;">${(data.displayName || data.email || "U")[0].toUpperCase()}</div>
-        <div>
-          <div style="font-weight:600;font-size:13px;">${data.displayName || "—"}</div>
-          <div style="font-size:12px;color:#64748b;">${data.email || ""}</div>
-        </div>
-        <span style="margin-left:auto;font-size:12px;color:#64748b;">${fmtDate(data.createdAt)}</span>
-      </div>`;
-    }).join("");
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
   } catch (e) { el.innerHTML = `<p class="error-msg">${e.message}</p>`; }
 }
 
@@ -662,7 +520,6 @@ async function loadRecentUsers() {
 // LOST & FOUND
 // =========================================
 async function loadLostFound() {
-<<<<<<< HEAD
   const listEl = document.getElementById('lostFoundCardList') || document.getElementById('lostFoundBody');
   const filter = document.getElementById('lostFoundFilter').value;
   if (!listEl) return;
@@ -721,59 +578,6 @@ async function loadLostFound() {
     }, (error) => { listEl.innerHTML = `<div style="color:#ef4444;padding:20px;">তথ্য লোড হয়নি: ${error.message}</div>`; });
     activeListeners.push(unsub);
   } catch (e) { listEl.innerHTML = `<div style="color:#ef4444;padding:20px;">${e.message}</div>`; }
-=======
-  const tbody = document.getElementById("lostFoundBody");
-  const filter = document.getElementById("lostFoundFilter").value;
-  tbody.innerHTML = loadingRow(4);
-  try {
-    let q;
-    if (filter === "all") {
-      q = query(collection(db, "lost_and_found"), orderBy("createdAt", "desc"));
-    } else {
-      const isRes = filter === "true";
-      q = query(collection(db, "lost_and_found"), where("resolved", "==", isRes));
-    }
-    const unsub = onSnapshot(q, (snap) => {
-      if (snap.empty) { tbody.innerHTML = emptyRow(4); return; }
-      
-      const docs = snap.docs.map(d => ({id: d.id, ...d.data()}));
-      if (filter !== "all") {
-        docs.sort((a,b) => {
-          const tA = (filter==="true" ? a.resolvedAt : a.createdAt);
-          const tB = (filter==="true" ? b.resolvedAt : b.createdAt);
-          return (tB?.seconds || 0) - (tA?.seconds || 0);
-        });
-      }
-      
-      tbody.innerHTML = docs.map(data => {
-        const itemClass = data.resolved ? "badge-success" : "badge-warning";
-        const itemText = data.resolved ? "সমাধানকৃত" : "অমীমাংসিত";
-        
-        let daysStr = "";
-        if (data.resolved && data.createdAt && data.resolvedAt) {
-           const dDiff = Math.floor((data.resolvedAt.seconds - data.createdAt.seconds) / (3600*24));
-           daysStr = `<br/><small style="color:#d97706;">সময় লেগেছে: ${dDiff} দিন</small>`;
-        }
-        
-        let actionHtml = `<div class="action-group">
-            <button class="btn-action btn-delete" onclick="confirmDelete('lost_and_found','${data.id}')">🗑️ মুছুন</button>`;
-        if(!data.resolved) {
-          actionHtml += ` <button class="btn-action btn-edit" style="background:#16a34a;" onclick="resolveLostFoundPrompt('${data.id}')">✅ সমাধান করুন</button>`;
-        }
-        actionHtml += `</div>`;
-
-        return `<tr>
-          <td><strong>${data.itemName || "—"}</strong><br/><small style="color:#666;">মালিক: ${data.ownerName||"—"}</small><br/>
-          <span class="badge ${itemClass}">${itemText}</span> ${daysStr}</td>
-          <td><small>স্থান: ${data.lostLocation||"—"}</small><br/><small>তারিখ: ${data.lostDate||"—"}</small></td>
-          <td>${data.phone||data.contactNumber||"—"}</td>
-          <td>${actionHtml}</td>
-        </tr>`;
-      }).join("");
-    }, (error) => { tbody.innerHTML = errorRow(4, error.message); });
-    activeListeners.push(unsub);
-  } catch (e) { tbody.innerHTML = errorRow(4, e.message); }
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
 }
 
 function resolveLostFoundPrompt(id) {
@@ -833,7 +637,6 @@ async function loadComplaints() {
       if (docsList.length === 0) { tbody.innerHTML = emptyRow(7); return; }
       tbody.innerHTML = docsList.map(d => {
         const data = d.data();
-<<<<<<< HEAD
         return `<tr class="animate-slideUp">
           <td data-label="ক্যাটাগরি"><span class="badge badge-info">${data.category || "সাধারণ"}</span></td>
           <td data-label="বিবরণ"><span class="truncate" title="${data.description}">${data.description || ""}</span></td>
@@ -842,16 +645,6 @@ async function loadComplaints() {
           <td data-label="স্ট্যাটাস"><span class="badge ${data.isResolved ? "badge-success" : "badge-warning"}">${data.isResolved ? "মীমাংসিত" : "অমীমাংসিত"}</span></td>
           <td data-label="তারিখ">${fmtDate(data.createdAt)}</td>
           <td data-label="অ্যাকশন">
-=======
-        return `<tr>
-          <td><span class="badge badge-info">${data.category || "সাধারণ"}</span></td>
-          <td><span class="truncate" title="${data.description}">${data.description || ""}</span></td>
-          <td>${data.name || "বেনামী"}</td>
-          <td>👍 ${data.agreeCount || 0}</td>
-          <td><span class="badge ${data.isResolved ? "badge-success" : "badge-warning"}">${data.isResolved ? "মীমাংসিত" : "অমীমাংসিত"}</span></td>
-          <td>${fmtDate(data.createdAt)}</td>
-          <td>
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
             <div class="action-group">
               <button class="btn-action btn-view" onclick="toggleResolved('${d.id}',${!data.isResolved})">${data.isResolved ? "⏪ পূর্বাবস্থা" : "✅ মীমাংসিত"}</button>
               <button class="btn-action btn-delete" onclick="confirmDelete('complaints','${d.id}')">🗑️ মুছুন</button>
@@ -887,7 +680,6 @@ async function loadBusinesses() {
       if (snap.empty) { tbody.innerHTML = emptyRow(8); return; }
       tbody.innerHTML = snap.docs.map(d => {
         const data = d.data();
-<<<<<<< HEAD
         return `<tr class="animate-slideUp">
           <td data-label="ব্যবসার নাম"><strong>${data.businessName || "—"}</strong></td>
           <td data-label="ধরণ"><span class="badge badge-info">${data.businessType || "—"}</span></td>
@@ -896,16 +688,6 @@ async function loadBusinesses() {
           <td data-label="ঠিকানা" class="truncate">${data.address || "—"}</td>
           <td data-label="তারিখ">${fmtDate(data.createdAt)}</td>
           <td data-label="অ্যাকশন">
-=======
-        return `<tr>
-          <td><strong>${data.businessName || "—"}</strong></td>
-          <td><span class="badge badge-info">${data.businessType || "—"}</span></td>
-          <td>${data.ownerName || "—"}</td>
-          <td>${data.ownerPhone || "—"}</td>
-          <td class="truncate">${data.address || "—"}</td>
-          <td>${fmtDate(data.createdAt)}</td>
-          <td>
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
             <div class="action-group">
               <button class="btn-action btn-view" onclick="viewBusiness('${d.id}')">👁️ দেখুন</button>
               <button class="btn-action btn-delete" onclick="confirmDelete('businesses','${d.id}')">🗑️ মুছুন</button>
@@ -990,7 +772,6 @@ async function loadBloodDonors() {
           const uid = data.userId;
           const lastDonDate = uid && lastDonationMap[uid] ? fmtDate(lastDonationMap[uid]) : "রক্তদান করেননি";
 
-<<<<<<< HEAD
           return `<tr class="animate-slideUp">
             <td data-label="নাম"><strong>${data.name || "—"}</strong></td>
             <td data-label="গ্রুপ"><div class="blood-badge">${data.bloodGroup || "?"}</div></td>
@@ -999,16 +780,6 @@ async function loadBloodDonors() {
             <td data-label="শেষ রক্তদান">${lastDonDate}</td>
             <td data-label="স্ট্যাটাস"><span class="badge ${data.isAvailable ? "badge-success" : "badge-danger"}">${data.isAvailable ? "উপলব্ধ" : "অনুপলব্ধ"}</span></td>
             <td data-label="অ্যাকশন">
-=======
-          return `<tr>
-            <td><strong>${data.name || "—"}</strong></td>
-            <td><div class="blood-badge">${data.bloodGroup || "?"}</div></td>
-            <td>${data.phone || "—"}</td>
-            <td><span class="truncate" title="${data.address || ""}">${data.address || "—"}</span></td>
-            <td>${lastDonDate}</td>
-            <td><span class="badge ${data.isAvailable ? "badge-success" : "badge-danger"}">${data.isAvailable ? "উপলব্ধ" : "অনুপলব্ধ"}</span></td>
-            <td>
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
               <button class="btn-action btn-delete" onclick="confirmDelete('donors','${d.id}')">🗑️ মুছুন</button>
             </td>
           </tr>`;
@@ -1065,7 +836,6 @@ async function editOrganization(id) {
   document.getElementById("orgObjectives").value   = (data.objectives || []).join("\n");
   document.getElementById("orgLogo").value         = data.logoUrl || "";
   document.getElementById("orgFoundingDate").value = data.foundingDate ? tsToDateInput(data.foundingDate) : "";
-<<<<<<< HEAD
   
   // Load Members
   const membersContainer = document.getElementById("orgMembersList");
@@ -1074,13 +844,10 @@ async function editOrganization(id) {
     data.members.forEach(m => addMemberField(m.designation, m.name, m.phone || ""));
   }
   
-=======
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
   document.getElementById("orgModalTitle").textContent = "সংগঠন সম্পাদনা করুন";
   showModal("orgModal");
 }
 
-<<<<<<< HEAD
 function addMemberField(designation = "", name = "", phone = "") {
   const container = document.getElementById("orgMembersList");
   const div = document.createElement("div");
@@ -1095,8 +862,6 @@ function addMemberField(designation = "", name = "", phone = "") {
 }
 window.addMemberField = addMemberField;
 
-=======
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
 async function saveOrganization() {
   const id         = document.getElementById("orgId").value;
   const name       = document.getElementById("orgName").value.trim();
@@ -1104,7 +869,6 @@ async function saveOrganization() {
   const logo       = document.getElementById("orgLogo").value.trim();
   const founding   = document.getElementById("orgFoundingDate").value;
 
-<<<<<<< HEAD
   // Collect Dynamic Members
   const memberElements = document.querySelectorAll(".members-list-item");
   const members = [];
@@ -1118,11 +882,6 @@ async function saveOrganization() {
   if (!name) { showToast("সংগঠনের নাম দিন", "error"); return; }
   const data = {
     name, objectives, members, logoUrl: logo || null,
-=======
-  if (!name) { showToast("সংগঠনের নাম দিন", "error"); return; }
-  const data = {
-    name, objectives, logoUrl: logo || null,
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
     foundingDate: founding ? Timestamp.fromDate(new Date(founding)) : serverTimestamp(),
     updatedAt: serverTimestamp()
   };
@@ -1154,7 +913,6 @@ async function loadJobs() {
     const q = query(collection(db, "jobs"), orderBy("createdAt", "desc"));
     const unsub = onSnapshot(q, (snap) => {
       if (snap.empty) { tbody.innerHTML = emptyRow(7); return; }
-<<<<<<< HEAD
         tbody.innerHTML = snap.docs.map(d => {
           const data = d.data();
           return `<tr class="animate-slideUp">
@@ -1169,22 +927,6 @@ async function loadJobs() {
             </td>
           </tr>`;
         }).join("");
-=======
-      tbody.innerHTML = snap.docs.map(d => {
-        const data = d.data();
-        return `<tr>
-          <td><strong>${data.jobTitle || "—"}</strong></td>
-          <td>${data.companyName || "—"}</td>
-          <td>${data.address || "—"}</td>
-          <td>${data.isSalaryDiscussable ? "আলোচনাসাপেক্ষ" : (data.salary || "—")}</td>
-          <td>${data.contactNumber || "—"}</td>
-          <td>${fmtDate(data.createdAt)}</td>
-          <td>
-            <button class="btn-action btn-delete" onclick="confirmDelete('jobs','${d.id}')">🗑️ মুছুন</button>
-          </td>
-        </tr>`;
-      }).join("");
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
     }, (error) => { tbody.innerHTML = errorRow(7, error.message); });
     activeListeners.push(unsub);
   } catch (e) { tbody.innerHTML = errorRow(7, e.message); }
@@ -1195,16 +937,12 @@ window.loadJobs = loadJobs;
 // ISLAMIC
 // =========================================
 async function loadIslamic() {
-<<<<<<< HEAD
   showIslamicTab('prayer'); // Always start on prayer tab
-=======
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
   try {
     const unsub = onSnapshot(doc(db, "islamicContent", "prayerTimes"), (snap) => {
       if (snap.exists()) {
         const data = snap.data();
         ["fajr","dhuhr","asr","maghrib","isha"].forEach(p => {
-<<<<<<< HEAD
           if (data[p]) {
             const timeStr = data[p];
             if (timeStr.includes("AM") || timeStr.includes("PM")) {
@@ -1220,9 +958,6 @@ async function loadIslamic() {
             }
             updateTimeDisplay(p);
           }
-=======
-          if (data[p]) document.getElementById(p).value = data[p];
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
         });
       }
     });
@@ -1231,7 +966,6 @@ async function loadIslamic() {
   loadDuas();
 }
 
-<<<<<<< HEAD
 function showIslamicTab(tab) {
   const prayerPanel = document.getElementById('ipanel-prayer');
   const duasPanel = document.getElementById('ipanel-duas');
@@ -1279,8 +1013,6 @@ function updateTimeDisplay(id) {
 }
 window.updateTimeDisplay = updateTimeDisplay;
 
-=======
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
 async function loadDuas() {
   const el = document.getElementById("duasList");
   el.innerHTML = '<div class="loading"></div>';
@@ -1306,7 +1038,6 @@ async function loadDuas() {
 }
 
 async function savePrayerTimes() {
-<<<<<<< HEAD
   const format12 = (val) => {
     if (!val) return "";
     const [h, m] = val.split(":");
@@ -1328,19 +1059,6 @@ async function savePrayerTimes() {
   try {
     await setDoc(doc(db, "islamicContent", "prayerTimes"), times);
     showToast("নামাজের সময়সূচী সফলভাবে ১২ ঘণ্টা ফরম্যাটে সেভ হয়েছে ✅", "success");
-=======
-  const times = {
-    fajr:    document.getElementById("fajr").value,
-    dhuhr:   document.getElementById("dhuhr").value,
-    asr:     document.getElementById("asr").value,
-    maghrib: document.getElementById("maghrib").value,
-    isha:    document.getElementById("isha").value,
-    updatedAt: serverTimestamp()
-  };
-  try {
-    await setDoc(doc(db, "islamicContent", "prayerTimes"), times);
-    showToast("নামাজের সময়সূচী আপডেট হয়েছে ✅", "success");
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
   } catch (e) { showToast(e.message, "error"); }
 }
 
@@ -1409,7 +1127,6 @@ function renderUsers(users) {
     const statusText = u.isBlocked ? "ব্লকড" : u.isSuspended ? "সাসপেন্ডেড" : "সক্রিয়";
     const verifiedIcon = u.isVerified ? ' <span style="color:#1d9bf0;font-size:16px;" title="Verified">✔</span>' : '';
 
-<<<<<<< HEAD
     return `<tr class="animate-slideUp">
       <td data-label="নাম"><strong>${u.displayName || "—"}</strong>${verifiedIcon}</td>
       <td data-label="ইমেইল">${u.email || "—"}</td>
@@ -1417,15 +1134,6 @@ function renderUsers(users) {
       <td data-label="স্ট্যাটাস"><span class="badge ${status}">${statusText}</span></td>
       <td data-label="তারিখ">${fmtDate(u.createdAt)}</td>
       <td data-label="অ্যাকশন">
-=======
-    return `<tr>
-      <td><strong>${u.displayName || "—"}</strong>${verifiedIcon}</td>
-      <td>${u.email || "—"}</td>
-      <td>${u.phone || "—"}</td>
-      <td><span class="badge ${status}">${statusText}</span></td>
-      <td>${fmtDate(u.createdAt)}</td>
-      <td>
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
         <div class="action-group">
           <button class="btn-action btn-view"  onclick="viewUser('${u.id}')">👁️ দেখুন</button>
           <button class="btn-action ${u.isVerified ? 'btn-delete' : 'btn-block'}" onclick="toggleUserVerify('${u.id}', ${!u.isVerified})" style="background-color: ${u.isVerified ? '#ef4444' : '#10b981'}; color: white;">${u.isVerified ? "❌ রিমুভ ভেরিফাই" : "✅ ভেরিফাই করুন"}</button>
@@ -1501,16 +1209,12 @@ async function loadAdmins() {
   tbody.innerHTML = loadingRow(7);
   try {
     const unsub = onSnapshot(collection(db, "admins"), (snap) => {
-<<<<<<< HEAD
       let admins = snap.docs.map(d => ({ id: d.id, ...d.data() }));
       // Non-superAdmins cannot see superAdmins
       if (currentAdminData?.role !== "superAdmin") {
         admins = admins.filter(a => a.role !== "superAdmin" && a.role !== "super_admin");
       }
       allAdmins = admins;
-=======
-      allAdmins = snap.docs.map(d => ({ id: d.id, ...d.data() }));
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
       renderAdmins(allAdmins);
     }, (error) => { tbody.innerHTML = errorRow(7, error.message); });
     activeListeners.push(unsub);
@@ -1530,7 +1234,6 @@ function renderAdmins(admins) {
     const perms  = (a.permissions || []).join(", ") || "সব";
     const expiry = a.expiryDate ? fmtDate(a.expiryDate) : "স্থায়ী";
     const expired = a.expiryDate && (new Date() > (a.expiryDate.toDate ? a.expiryDate.toDate() : new Date(a.expiryDate)));
-<<<<<<< HEAD
     return `<tr class="animate-slideUp">
       <td data-label="নাম"><strong>${a.name || "—"}</strong></td>
       <td data-label="ইমেইল">${a.email || "—"}</td>
@@ -1538,15 +1241,6 @@ function renderAdmins(admins) {
       <td data-label="মেয়াদ">${expiry}</td>
       <td data-label="স্ট্যাটাস"><span class="badge ${expired ? "badge-danger" : "badge-success"}">${expired ? "মেয়াদোত্তীর্ণ" : "সক্রিয়"}</span></td>
       <td data-label="অ্যাকশন">
-=======
-    return `<tr>
-      <td><strong>${a.name || "—"}</strong></td>
-      <td>${a.email || "—"}</td>
-      <td><span class="badge badge-purple">${a.role || "admin"}</span></td>
-      <td>${expiry}</td>
-      <td><span class="badge ${expired ? "badge-danger" : "badge-success"}">${expired ? "মেয়াদোত্তীর্ণ" : "সক্রিয়"}</span></td>
-      <td>
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
         <div class="action-group">
           ${currentAdminData?.role === "superAdmin" ? `
             <button class="btn-action btn-reset" onclick="openResetPasswordModal('${a.id}')">🔑 পাসওয়ার্ড</button>
@@ -1908,20 +1602,13 @@ function filterPhonebook(cat) {
 }
 
 function loadPhonebook(cat) {
-<<<<<<< HEAD
   const container = document.getElementById('phonebookCardList');
   if (!container) return;
   container.innerHTML = '<div style="padding:30px;text-align:center;"><div class="loading"></div></div>';
-=======
-  const tbody = document.getElementById('phonebookBody');
-  if (!tbody) return;
-  tbody.innerHTML = '<tr><td colspan="5"><div class="loading"></div></td></tr>';
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
 
   if (pbListener) { pbListener(); pbListener = null; }
 
   pbListener = onSnapshot(
-<<<<<<< HEAD
     query(collection(db, 'emergency_contacts'), where('category', '==', cat)),
     (snap) => {
       if (snap.empty) {
@@ -1972,33 +1659,6 @@ function loadPhonebook(cat) {
       console.error('loadPhonebook error:', err);
       container.innerHTML = `<div style="color:#ef4444;padding:20px;">তথ্য লোড হয়নি: ${err.message}</div>`;
     }
-=======
-    query(collection(db, 'local_phonebook'), where('category', '==', cat), orderBy('lastUpdated', 'desc')),
-    (snap) => {
-      if (snap.empty) {
-        tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#94a3b8;padding:30px;">এই ক্যাটাগরিতে কোনো তথ্য নেই।</td></tr>`;
-        return;
-      }
-      tbody.innerHTML = snap.docs.map(d => {
-        const data = d.data();
-        const primaryName = data.name || data.officerName || data.driverName || data.doctorName || '—';
-        const phone = data.phone || data.hotline || '—';
-        const detail = data.officeAddress || data.address || data.station || data.chamberInfo || data.specialty || '—';
-        const lu = data.lastUpdated ? new Date(data.lastUpdated.seconds * 1000).toLocaleDateString('bn-BD') : '—';
-        return `<tr>
-          <td><strong>${primaryName}</strong></td>
-          <td><a href="tel:${phone}" style="color:#2563eb;font-weight:600;">${phone}</a></td>
-          <td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${detail}</td>
-          <td style="font-size:12px;color:#64748b;">${lu}</td>
-          <td>
-            <button class="btn-sm btn-primary" onclick="editPhonebookEntry('${d.id}')">✏️</button>
-            <button class="btn-sm btn-danger" onclick="deletePhonebookEntry('${d.id}')">🗑️</button>
-          </td>
-        </tr>`;
-      }).join('');
-    },
-    err => console.error('loadPhonebook error:', err)
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
   );
 }
 
@@ -2048,19 +1708,11 @@ async function savePhonebookEntry() {
 
   try {
     if (id) {
-<<<<<<< HEAD
       await updateDoc(doc(db, 'emergency_contacts', id), data);
       showToast('তথ্য আপডেট হয়েছে ✅', 'success');
     } else {
       data.createdAt = serverTimestamp();
       await addDoc(collection(db, 'emergency_contacts'), data);
-=======
-      await updateDoc(doc(db, 'local_phonebook', id), data);
-      showToast('তথ্য আপডেট হয়েছে ✅', 'success');
-    } else {
-      data.createdAt = serverTimestamp();
-      await addDoc(collection(db, 'local_phonebook'), data);
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
       showToast('নতুন তথ্য যুক্ত হয়েছে ✅', 'success');
     }
     closeModal('phonebookModal');
@@ -2070,11 +1722,7 @@ async function savePhonebookEntry() {
 
 async function editPhonebookEntry(id) {
   try {
-<<<<<<< HEAD
     const snap = await getDoc(doc(db, 'emergency_contacts', id));
-=======
-    const snap = await getDoc(doc(db, 'local_phonebook', id));
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
     if (!snap.exists()) { showToast('তথ্য পাওয়া যায়নি।', 'error'); return; }
     showPhonebookModal(snap.data(), id);
   } catch(e) { showToast(e.message, 'error'); }
@@ -2083,11 +1731,7 @@ async function editPhonebookEntry(id) {
 function deletePhonebookEntry(id) {
   showConfirm('এন্ট্রিটি মুছবেন?', 'এই তথ্যটি স্থায়ীভাবে মুছে যাবে।', async () => {
     try {
-<<<<<<< HEAD
       await deleteDoc(doc(db, 'emergency_contacts', id));
-=======
-      await deleteDoc(doc(db, 'local_phonebook', id));
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
       showToast('মুছে ফেলা হয়েছে।', 'success');
     } catch(e) { showToast(e.message, 'error'); }
   });
@@ -2128,18 +1772,12 @@ async function sendPushNotification() {
     });
 
     // 2. HTTP Request to Firebase Cloud Messaging (Legacy API)
-<<<<<<< HEAD
     let fcmServerKey = localStorage.getItem('fcm_server_key');
     
     if (!fcmServerKey) {
       fcmServerKey = prompt('নিরাপত্তার খাতিরে আপনার FCM Server Key এখানে দিন (এটি ব্রাউজারে সেভ থাকবে):');
       if (fcmServerKey) localStorage.setItem('fcm_server_key', fcmServerKey);
     }
-=======
-    // IMPORTANT: Legacy API needs a Server Key. Since it's deprecated by Google,
-    // this acts as a placeholder if the admin decides to use HTTP v1 or Cloud Functions.
-    const fcmServerKey = prompt('নিরাপত্তার খাতিরে আপনার FCM Server Key এখানে দিন (যদি না থাকে তবে Cancel করুন, ইন-অ্যাপ পপআপ কাজ করবে):');
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
     
     if (fcmServerKey && fcmServerKey.trim() !== '') {
       const payload = {
@@ -2194,7 +1832,6 @@ async function sendPushNotification() {
   }
 }
 window.sendPushNotification = sendPushNotification;
-<<<<<<< HEAD
 // =========================================
 // NOTICES BOARD
 // =========================================
@@ -2661,5 +2298,3 @@ window.showHeritagePlaceModal = showHeritagePlaceModal;
 window.saveHeritagePlace = saveHeritagePlace;
 window.editHeritagePlace = editHeritagePlace;
 window.deleteHeritagePlace = deleteHeritagePlace;
-=======
->>>>>>> 91f9712325e25feb04839466aa9f0c86b5777502
